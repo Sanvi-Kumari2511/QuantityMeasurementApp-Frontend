@@ -1,0 +1,170 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <title>Quantity Measurement</title>
+
+    <!-- YOUR CSS -->
+    <link rel="stylesheet" href="style.css" />
+
+    <!-- ADD THIS LINE BELOW -->
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css"
+    />
+  </head>
+  <body>
+    <main class="app-shell">
+      <section class="card">
+        <header
+          class="header"
+          style="
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 16px 26px;
+          "
+        >
+          <h1 style="margin: 0; text-align: left">
+            Welcome To Quantity Measurement
+          </h1>
+          <div style="display: flex; gap: 10px">
+            <a
+              href="login.html"
+              onclick="localStorage.setItem('authTab', 'login')"
+              style="
+                color: white;
+                border: 2px solid rgba(255, 255, 255, 0.7);
+                padding: 6px 16px;
+                border-radius: 6px;
+                text-decoration: none;
+                font-weight: 700;
+                font-size: 15px;
+                transition: background 0.2s;
+              "
+              onmouseover="this.style.background = 'rgba(255,255,255,0.2)'"
+              onmouseout="this.style.background = 'transparent'"
+              >Login</a
+            >
+            <a
+              href="login.html"
+              onclick="localStorage.setItem('authTab', 'signup')"
+              style="
+                background: white;
+                color: #4260e8;
+                border: 2px solid white;
+                padding: 6px 16px;
+                border-radius: 6px;
+                text-decoration: none;
+                font-weight: 700;
+                font-size: 15px;
+                transition: background 0.2s;
+              "
+              onmouseover="this.style.background = '#f0f0f0'"
+              onmouseout="this.style.background = 'white'"
+              >Signup</a
+            >
+          </div>
+        </header>
+
+        <div class="content">
+          <p class="section-label">CHOOSE TYPE</p>
+          <div class="type-grid" id="typeGrid">
+            <button class="type-card active length" data-type="length">
+              <span class="effect lines"></span>
+              <span class="icon">📏</span>
+              <span class="text">Length</span>
+            </button>
+            <button class="type-card weight" data-type="weight">
+              <span class="effect dumbbells"></span>
+              <span class="icon">⚖️</span>
+              <span class="text">Weight</span>
+            </button>
+            <button class="type-card temperature" data-type="temperature">
+              <span class="effect fire"></span>
+              <span class="icon">🌡️</span>
+              <span class="text">Temperature</span>
+            </button>
+            <button class="type-card volume" data-type="volume">
+              <span class="effect bubbles"></span>
+              <span class="icon">🧴</span>
+              <span class="text">Volume</span>
+            </button>
+          </div>
+
+          <p class="section-label">CHOOSE ACTION</p>
+          <div class="action-tabs" id="actionTabs">
+            <button class="tab active" data-action="comparison">
+              Comparison
+            </button>
+            <button class="tab" data-action="conversion">Conversion</button>
+            <button class="tab" data-action="arithmetic">Arithmetic</button>
+          </div>
+
+          <div class="panel" id="comparisonPanel">
+            <div class="field-group">
+              <label>FROM</label>
+              <div class="input-box">
+                <input id="fromValue" type="number" value="1" step="any" />
+              </div>
+              <div class="select-box">
+                <select id="fromUnit"></select>
+              </div>
+            </div>
+            <div class="field-group">
+              <label>TO</label>
+              <div class="input-box result">
+                <input id="toValue" type="number" readonly />
+              </div>
+              <div class="select-box">
+                <select id="toUnit"></select>
+              </div>
+            </div>
+          </div>
+
+          <div class="panel hidden" id="conversionPanel">
+            <div class="field-group full">
+              <label>VALUE</label>
+              <div class="conversion-row">
+                <input id="convInput" type="number" value="1" step="any" />
+                <select id="convFromUnit"></select>
+                <span class="arrow">→</span>
+                <select id="convToUnit"></select>
+                <button id="convertBtn">Convert</button>
+              </div>
+              <p class="result-line">
+                Result: <strong id="convResult">-</strong>
+              </p>
+            </div>
+          </div>
+
+          <div class="panel hidden" id="arithmeticPanel">
+            <div class="field-group full">
+              <label>ARITHMETIC</label>
+              <div class="arith-row">
+                <input id="arithA" type="number" value="10" step="any" />
+                <select id="arithUnitA"></select>
+                <select id="arithOp">
+                  <option value="+">+</option>
+                  <option value="-">-</option>
+                  <option value="*">*</option>
+                  <option value="/">/</option>
+                </select>
+                <input id="arithB" type="number" value="2" step="any" />
+                <select id="arithUnitB"></select>
+                <span class="arrow">→</span>
+                <select id="arithResultUnit"></select>
+                <button id="arithBtn">Calculate</button>
+              </div>
+              <p class="result-line">
+                Answer: <strong id="arithResult">-</strong>
+              </p>
+            </div>
+          </div>
+        </div>
+      </section>
+    </main>
+
+    <script src="script.js"></script>
+  </body>
+</html>
