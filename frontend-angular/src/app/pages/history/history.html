@@ -1,0 +1,77 @@
+<div class="history-shell">
+  <header class="history-header">
+    <div class="brand">
+      <span class="brand-emoji">📜</span>
+      <span class="brand-name">YOUR ACTIVITY HISTORY</span>
+    </div>
+    <nav class="header-actions">
+      <a routerLink="/" class="btn btn-home">Home</a>
+      <button class="btn btn-logout" (click)="showLogoutConfirm()">Logout</button>
+    </nav>
+  </header>
+
+  <section class="banner">
+    <h1>Operation Logs</h1>
+    <p>Review all your previous measurements and mathematical formulas</p>
+  </section>
+
+  <section class="history-card">
+    @if (isLoading) {
+      <div class="loading-state">Loading your history...</div>
+    } @else if (errorMessage) {
+      <div class="error-state">
+        <h3>Error</h3>
+        <p>{{ errorMessage }}</p>
+        <button class="btn btn-retry" (click)="fetchHistory()">Retry</button>
+      </div>
+    } @else if (history.length === 0) {
+      <div class="empty-state">
+        <h3>No history found</h3>
+        <p>Go to the home page and perform an operation to see it here!</p>
+      </div>
+    } @else {
+      <div class="timeline">
+        @for (log of history; track log.id) {
+          <div class="timeline-item" [class]="getOpClass(log.operation)">
+            <div class="timeline-marker"></div>
+            <div class="timeline-content">
+              <div class="timeline-header">
+                <span class="op-badge" [class]="getOpClass(log.operation)">
+                  {{ log.operation }}
+                </span>
+                <span class="timeline-date">{{ formatTime(log.timestamp) }}</span>
+              </div>
+              <div class="timeline-body">
+                <div class="operands">
+                  <span class="operand">{{ log.operand1 || '-' }}</span>
+                  @if (log.operand2) {
+                    <span class="operand-separator">+</span>
+                    <span class="operand">{{ log.operand2 }}</span>
+                  }
+                </div>
+                <div class="result">
+                  <span class="result-label">Result:</span>
+                  <span class="result-value">{{ log.result }}</span>
+                </div>
+              </div>
+            </div>
+          </div>
+        }
+      </div>
+    }
+  </section>
+
+  @if (showLogoutDialog) {
+  <div class="logout-dialog-overlay" (click)="cancelLogout()">
+    <div class="logout-dialog" (click)="$event.stopPropagation()">
+      <div class="dialog-icon">⚠️</div>
+      <h2>Logout</h2>
+      <p>Are you sure you want to logout?</p>
+      <div class="dialog-actions">
+        <button class="btn-cancel" (click)="cancelLogout()">Cancel</button>
+        <button class="btn-confirm" (click)="confirmLogout()">Logout</button>
+      </div>
+    </div>
+  </div>
+  }
+</div>

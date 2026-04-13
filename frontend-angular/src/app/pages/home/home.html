@@ -1,0 +1,210 @@
+<div class="home-shell">
+  <!-- Header -->
+  <header class="home-header">
+    <div class="brand">
+      <span class="brand-emoji">⚖️</span>
+      <span class="brand-name">QUANITY MEASUREMENT APP</span>
+    </div>
+    <nav class="header-actions">
+      @if (authService.isLoggedIn()) {
+        <a routerLink="/history" class="btn btn-login">View History</a>
+        <button class="btn btn-logout" (click)="showLogoutConfirm()">Logout</button>
+      } @else {
+        <a routerLink="/auth" [queryParams]="{ tab: 'login' }" class="btn btn-login">Login</a>
+        <a routerLink="/auth" [queryParams]="{ tab: 'signup' }" class="btn btn-signup">Signup</a>
+      }
+    </nav>
+  </header>
+
+  <!-- Blue Banner -->
+  <section class="banner">
+    <h1>Welcome To Quantity Measurement</h1>
+  </section>
+
+  <!-- Main Content -->
+  <section class="converter-card">
+    <!-- Choose Type -->
+    <div class="section-block">
+      <p class="section-label">CHOOSE TYPE</p>
+      <div class="type-grid">
+        @for (type of types; track type.id) {
+          <button
+            class="type-card"
+            [class.selected]="selectedType === type.id"
+            [attr.data-type]="type.id"
+            (click)="selectType(type.id)"
+          >
+            <span class="type-icon">{{ type.icon }}</span>
+            <span class="type-label">{{ type.label }}</span>
+            <!-- Hover emoji particles -->
+            <span class="hover-particles">
+              @for (p of [1, 2, 3, 4, 5]; track p) {
+                <span class="particle" [attr.data-i]="p">{{ type.hoverEmoji }}</span>
+              }
+            </span>
+          </button>
+        }
+      </div>
+    </div>
+
+    <!-- Choose Action -->
+    <div class="section-block">
+      <p class="section-label">CHOOSE ACTION</p>
+      <div class="action-row">
+        @for (action of actions; track action) {
+          <button
+            class="action-btn"
+            [class.active]="selectedAction === action"
+            (click)="selectAction(action)"
+          >
+            {{ action }}
+          </button>
+        }
+      </div>
+    </div>
+
+    <!-- Comparison Mode -->
+    @if (selectedAction === 'Comparison') {
+      <div class="conversion-row">
+        <div class="conv-card">
+          <p class="conv-label">FROM</p>
+          <input
+            type="number"
+            class="conv-value"
+            [(ngModel)]="fromValue"
+            (ngModelChange)="onFromValueChange()"
+          />
+          <select class="conv-unit" [(ngModel)]="fromUnit" (ngModelChange)="onUnitChange()">
+            @for (unit of units; track unit) {
+              <option [value]="unit">{{ unit }}</option>
+            }
+          </select>
+        </div>
+        <div class="comparison-result">
+          <span class="comparison-symbol">{{ comparisonSymbol }}</span>
+          <span class="comparison-text">{{ comparisonText }}</span>
+        </div>
+        <div class="conv-card">
+          <p class="conv-label">TO</p>
+          <input
+            type="number"
+            class="conv-value"
+            [(ngModel)]="toCompareValue"
+            (ngModelChange)="onCompareValueChange()"
+          />
+          <select class="conv-unit" [(ngModel)]="toUnit" (ngModelChange)="onUnitChange()">
+            @for (unit of units; track unit) {
+              <option [value]="unit">{{ unit }}</option>
+            }
+          </select>
+        </div>
+      </div>
+    }
+
+    <!-- Conversion Mode -->
+    @if (selectedAction === 'Conversion') {
+      <div class="conversion-row">
+        <div class="conv-card">
+          <p class="conv-label">VALUE</p>
+          <input
+            type="number"
+            class="conv-value"
+            [(ngModel)]="fromValue"
+            (ngModelChange)="onFromValueChange()"
+          />
+          <select class="conv-unit" [(ngModel)]="fromUnit" (ngModelChange)="onUnitChange()">
+            @for (unit of units; track unit) {
+              <option [value]="unit">{{ unit }}</option>
+            }
+          </select>
+        </div>
+        <div class="conv-arrow">➜</div>
+        <div class="conv-card">
+          <p class="conv-label">RESULT</p>
+          <input type="number" class="conv-value result" [value]="toValue" readonly />
+          <select class="conv-unit" [(ngModel)]="toUnit" (ngModelChange)="onUnitChange()">
+            @for (unit of units; track unit) {
+              <option [value]="unit">{{ unit }}</option>
+            }
+          </select>
+        </div>
+      </div>
+    }
+
+    <!-- Arithmetic Mode -->
+    @if (selectedAction === 'Arithmetic') {
+      <div class="arithmetic-section">
+        <div class="arith-row">
+          <div class="arith-card">
+            <label class="conv-label">VALUE 1</label>
+            <input
+              type="number"
+              class="arith-input"
+              [(ngModel)]="arithmeticVal1"
+              (ngModelChange)="onArithmeticChange()"
+            />
+            <select
+              class="conv-unit"
+              [(ngModel)]="arithmeticUnit"
+              (ngModelChange)="onArithmeticChange()"
+            >
+              @for (unit of units; track unit) {
+                <option [value]="unit">{{ unit }}</option>
+              }
+            </select>
+          </div>
+          <div class="arith-op-card">
+            <select
+              class="op-select"
+              [(ngModel)]="arithmeticOp"
+              (ngModelChange)="onArithmeticChange()"
+            >
+              <option value="add">+</option>
+              <option value="subtract">−</option>
+              <option value="multiply">×</option>
+              <option value="divide">÷</option>
+            </select>
+          </div>
+          <div class="arith-card">
+            <label class="conv-label">VALUE 2</label>
+            <input
+              type="number"
+              class="arith-input"
+              [(ngModel)]="arithmeticVal2"
+              (ngModelChange)="onArithmeticChange()"
+            />
+            <select
+              class="conv-unit"
+              [(ngModel)]="arithmeticUnit"
+              (ngModelChange)="onArithmeticChange()"
+            >
+              @for (unit of units; track unit) {
+                <option [value]="unit">{{ unit }}</option>
+              }
+            </select>
+          </div>
+          <div class="arith-eq">=</div>
+          <div class="arith-card result-card">
+            <label class="conv-label">RESULT</label>
+            <div class="arith-result-num">{{ arithmeticResult }}</div>
+            <span class="arith-result-unit">{{ arithmeticUnit }}</span>
+          </div>
+        </div>
+      </div>
+    }
+  </section>
+
+  @if (showLogoutDialog) {
+    <div class="logout-dialog-overlay" (click)="cancelLogout()">
+      <div class="logout-dialog" (click)="$event.stopPropagation()">
+        <div class="dialog-icon">⚠️</div>
+        <h2>Logout</h2>
+        <p>Are you sure you want to logout?</p>
+        <div class="dialog-actions">
+          <button class="btn-cancel" (click)="cancelLogout()">Cancel</button>
+          <button class="btn-confirm" (click)="confirmLogout()">Logout</button>
+        </div>
+      </div>
+    </div>
+  }
+</div>
