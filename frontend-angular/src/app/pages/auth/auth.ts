@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { AuthService } from '../../services/auth.service';
@@ -38,7 +39,7 @@ function validateMobile(v: string): string {
 @Component({
   selector: 'app-auth',
   standalone: true,
-  imports: [FormsModule],
+  imports: [CommonModule, FormsModule],
   templateUrl: './auth.html',
   styleUrls: ['./auth.css'],
 })
@@ -62,6 +63,7 @@ export class AuthComponent implements OnInit {
   signupPasswordError = '';
   signupMobileError = '';
   signupServerError = '';
+  signupSuccessMessage = '';
 
   popupVisible = false;
   popupText = '';
@@ -90,6 +92,11 @@ export class AuthComponent implements OnInit {
   showTab(tab: 'login' | 'signup'): void {
     this.activeTab = tab;
     this.clearAllErrors();
+    this.popupVisible = false;
+    this.emojiPieces = [];
+    if (tab === 'signup') {
+      this.signupSuccessMessage = '';
+    }
   }
 
   togglePassword(input: HTMLInputElement): void {
@@ -105,6 +112,9 @@ export class AuthComponent implements OnInit {
   }
 
   submitLogin(): void {
+    console.log('submitLogin called', this.loginEmail, this.loginPassword);
+    this.popupVisible = false;
+    this.emojiPieces = [];
     this.loginEmailError = validateEmail(this.loginEmail);
     this.loginPasswordError = validatePassword(this.loginPassword, false);
     this.loginServerError = '';
@@ -146,7 +156,11 @@ export class AuthComponent implements OnInit {
         next: (response) => {
           console.log('Signup success:', response);
           this.isLoading = false;
-          this.showPopup('User registered successfully');
+          this.signupName = '';
+          this.signupEmail = '';
+          this.signupPassword = '';
+          this.signupMobile = '';
+          this.signupSuccessMessage = 'user registered successfully';
         },
         error: (err: HttpErrorResponse | any) => {
           console.error('Signup error:', err);
@@ -183,10 +197,7 @@ export class AuthComponent implements OnInit {
   closePopup(): void {
     this.popupVisible = false;
     this.emojiPieces = [];
-    if (this.popupText.includes('register')) {
-      this.showTab('login');
-      this.router.navigate(['/auth'], { queryParams: { tab: 'login' } });
-    } else if (this.popupText.includes('logged')) {
+    if (this.popupText.includes('logged')) {
       this.router.navigate(['/']);
     }
   }
@@ -200,6 +211,7 @@ export class AuthComponent implements OnInit {
     this.signupPasswordError = '';
     this.signupMobileError = '';
     this.signupServerError = '';
+    this.signupSuccessMessage = '';
   }
 
   private createEmojiBurst(): { emoji: string; x: number; y: number }[] {

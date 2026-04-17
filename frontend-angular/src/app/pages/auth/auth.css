@@ -56,8 +56,10 @@
   padding: 24px;
   background:
     linear-gradient(135deg, rgba(255, 255, 255, 0.9), rgba(255, 255, 255, 0.96)),
-    url("/assets/quantity-pattern.png");
-  background-size: 260px 260px, 320px 320px;
+    url('/assets/quantity-pattern.png');
+  background-size:
+    260px 260px,
+    320px 320px;
   background-repeat: repeat;
   background-position: center;
 }
@@ -142,7 +144,10 @@
   border-radius: 4px;
   padding: 0 10px;
   font-size: 16px;
-  transition: border-color 120ms ease, box-shadow 120ms ease, background-color 120ms ease;
+  transition:
+    border-color 120ms ease,
+    box-shadow 120ms ease,
+    background-color 120ms ease;
 }
 
 .auth-form input.input-error {
@@ -179,6 +184,17 @@
   font-size: 14px;
   text-align: center;
   margin-top: 8px;
+}
+
+.success-msg {
+  color: #0f5132;
+  background: #d1e7dd;
+  border: 1px solid #badbcc;
+  padding: 10px;
+  border-radius: 4px;
+  font-size: 14px;
+  text-align: center;
+  margin-bottom: 10px;
 }
 
 .auth-form input:focus {
@@ -220,7 +236,10 @@
   font-weight: 700;
   cursor: pointer;
   box-shadow: 0 10px 18px rgba(155, 36, 49, 0.3);
-  transition: transform 120ms ease, box-shadow 120ms ease, filter 120ms ease;
+  transition:
+    transform 120ms ease,
+    box-shadow 120ms ease,
+    filter 120ms ease;
 }
 
 .submit-btn:hover {

@@ -3,7 +3,11 @@
     <div class="left-pane">
       <div class="illustration-wrap">
         <div class="illustration-circle">
-          <img src="assets/measurement-illustration.png" alt="Measurement tools" class="illustration-img" />
+          <img
+            src="assets/measurement-illustration.png"
+            alt="Measurement tools"
+            class="illustration-img"
+          />
         </div>
         <p class="brand-text">QUANITY MEASUREMENT APP</p>
       </div>
@@ -11,110 +15,143 @@
 
     <div class="right-pane">
       <div class="tab-row">
-        <button class="tab-btn" [class.active]="activeTab === 'login'" type="button" (click)="showTab('login')">
+        <button
+          class="tab-btn"
+          [class.active]="activeTab === 'login'"
+          type="button"
+          (click)="showTab('login')"
+        >
           LOGIN
         </button>
-        <button class="tab-btn" [class.active]="activeTab === 'signup'" type="button" (click)="showTab('signup')">
+        <button
+          class="tab-btn"
+          [class.active]="activeTab === 'signup'"
+          type="button"
+          (click)="showTab('signup')"
+        >
           SIGNUP
         </button>
       </div>
 
-      @if (activeTab === 'login') {
-      <form class="auth-form" (ngSubmit)="submitLogin()" #loginFormRef="ngForm" novalidate>
+      <ng-container *ngIf="activeTab === 'login'">
+        <form class="auth-form" novalidate>
+          <label>Email Id</label>
+          <input
+            name="loginEmail"
+            type="email"
+            [(ngModel)]="loginEmail"
+            [class.input-error]="loginEmailError"
+            autocomplete="email"
+          />
+          <span *ngIf="loginEmailError" class="error-msg">{{ loginEmailError }}</span>
 
-        <label>Email Id</label>
-        <input name="loginEmail" type="email" [(ngModel)]="loginEmail"
-               [class.input-error]="loginEmailError" autocomplete="email" />
-        @if (loginEmailError) {
-          <span class="error-msg">{{ loginEmailError }}</span>
-        }
+          <label>Password</label>
+          <div class="password-box" [class.input-error-wrap]="loginPasswordError">
+            <input
+              #loginPasswordInput
+              name="loginPassword"
+              type="password"
+              [(ngModel)]="loginPassword"
+              autocomplete="current-password"
+            />
+            <button type="button" class="eye-btn" (click)="togglePassword(loginPasswordInput)">
+              👁️
+            </button>
+          </div>
+          <span *ngIf="loginPasswordError" class="error-msg">{{ loginPasswordError }}</span>
 
-        <label>Password</label>
-        <div class="password-box" [class.input-error-wrap]="loginPasswordError">
-          <input #loginPasswordInput name="loginPassword" type="password"
-                 [(ngModel)]="loginPassword" autocomplete="current-password" />
-          <button type="button" class="eye-btn" (click)="togglePassword(loginPasswordInput)">👁️</button>
-        </div>
-        @if (loginPasswordError) {
-          <span class="error-msg">{{ loginPasswordError }}</span>
-        }
+          <div *ngIf="loginServerError" class="server-error">{{ loginServerError }}</div>
 
-        @if (loginServerError) {
-          <div class="server-error">{{ loginServerError }}</div>
-        }
+          <button class="submit-btn" type="button" (click)="submitLogin()" [disabled]="isLoading">
+            {{ isLoading ? 'Logging in…' : 'Login' }}
+          </button>
+          <button class="google-btn" type="button" (click)="googleLogin()">
+            <span class="google-icon">G</span> Continue with Google
+          </button>
+          <p class="switch-link">
+            Don't have an account? <a (click)="showTab('signup')">Signup</a>
+          </p>
+        </form>
+      </ng-container>
+      <ng-container *ngIf="activeTab === 'signup'">
+        <form class="auth-form" novalidate>
+          <div *ngIf="signupSuccessMessage" class="success-msg">{{ signupSuccessMessage }}</div>
 
-        <button class="submit-btn" type="submit" [disabled]="isLoading">
-          {{ isLoading ? 'Logging in…' : 'Login' }}
-        </button>
-        <button class="google-btn" type="button" (click)="googleLogin()">
-          <span class="google-icon">G</span> Continue with Google
-        </button>
-        <p class="switch-link">Don't have an account? <a (click)="showTab('signup')">Signup</a></p>
-      </form>
-      } @else {
-      <form class="auth-form" (ngSubmit)="submitSignup()" #signupFormRef="ngForm" novalidate>
+          <label>Full Name</label>
+          <input
+            name="signupName"
+            type="text"
+            [(ngModel)]="signupName"
+            [class.input-error]="signupNameError"
+            autocomplete="name"
+          />
+          <span *ngIf="signupNameError" class="error-msg">{{ signupNameError }}</span>
 
-        <label>Full Name</label>
-        <input name="signupName" type="text" [(ngModel)]="signupName"
-               [class.input-error]="signupNameError" autocomplete="name" />
-        @if (signupNameError) {
-          <span class="error-msg">{{ signupNameError }}</span>
-        }
+          <label>Email Id</label>
+          <input
+            name="signupEmail"
+            type="email"
+            [(ngModel)]="signupEmail"
+            [class.input-error]="signupEmailError"
+            autocomplete="email"
+          />
+          <span *ngIf="signupEmailError" class="error-msg">{{ signupEmailError }}</span>
 
-        <label>Email Id</label>
-        <input name="signupEmail" type="email" [(ngModel)]="signupEmail"
-               [class.input-error]="signupEmailError" autocomplete="email" />
-        @if (signupEmailError) {
-          <span class="error-msg">{{ signupEmailError }}</span>
-        }
+          <label>Password</label>
+          <div class="password-box" [class.input-error-wrap]="signupPasswordError">
+            <input
+              #signupPasswordInput
+              name="signupPassword"
+              type="password"
+              [(ngModel)]="signupPassword"
+              autocomplete="new-password"
+            />
+            <button type="button" class="eye-btn" (click)="togglePassword(signupPasswordInput)">
+              👁️
+            </button>
+          </div>
+          <span *ngIf="signupPasswordError" class="error-msg">{{ signupPasswordError }}</span>
 
-        <label>Password</label>
-        <div class="password-box" [class.input-error-wrap]="signupPasswordError">
-          <input #signupPasswordInput name="signupPassword" type="password"
-                 [(ngModel)]="signupPassword" autocomplete="new-password" />
-          <button type="button" class="eye-btn" (click)="togglePassword(signupPasswordInput)">👁️</button>
-        </div>
-        @if (signupPasswordError) {
-          <span class="error-msg">{{ signupPasswordError }}</span>
-        }
+          <label>Mobile Number</label>
+          <input
+            name="signupMobile"
+            type="tel"
+            [(ngModel)]="signupMobile"
+            [class.input-error]="signupMobileError"
+            autocomplete="tel"
+            maxlength="10"
+          />
+          <span *ngIf="signupMobileError" class="error-msg">{{ signupMobileError }}</span>
 
-        <label>Mobile Number</label>
-        <input name="signupMobile" type="tel" [(ngModel)]="signupMobile"
-               [class.input-error]="signupMobileError" autocomplete="tel" maxlength="10" />
-        @if (signupMobileError) {
-          <span class="error-msg">{{ signupMobileError }}</span>
-        }
+          <div *ngIf="signupServerError" class="server-error">{{ signupServerError }}</div>
 
-        @if (signupServerError) {
-          <div class="server-error">{{ signupServerError }}</div>
-        }
-
-        <button class="submit-btn" type="submit" [disabled]="isLoading">
-          {{ isLoading ? 'Registering…' : 'Signup' }}
-        </button>
-        <button class="google-btn" type="button" (click)="googleSignup()">
-          <span class="google-icon">G</span> Continue with Google
-        </button>
-        <p class="switch-link">Already registered? <a (click)="showTab('login')">Login</a></p>
-      </form>
-      }
+          <button class="submit-btn" type="button" (click)="submitSignup()" [disabled]="isLoading">
+            {{ isLoading ? 'Registering…' : 'Signup' }}
+          </button>
+          <button class="google-btn" type="button" (click)="googleSignup()">
+            <span class="google-icon">G</span> Continue with Google
+          </button>
+          <p class="switch-link">Already registered? <a (click)="showTab('login')">Login</a></p>
+        </form>
+      </ng-container>
     </div>
   </section>
 
-  @if (popupVisible) {
-  <div class="popup-overlay" (click)="closePopup()">
+  <div *ngIf="popupVisible" class="popup-overlay">
     <div class="popup-card" (click)="$event.stopPropagation()">
       <h3>{{ popupText }}</h3>
       <button type="button" (click)="closePopup()">Close</button>
     </div>
 
     <div class="emoji-burst">
-      @for (piece of emojiPieces; track $index) {
-      <span class="emoji" [style.--x]="piece.x + 'px'" [style.--y]="piece.y + 'px'">
+      <span
+        *ngFor="let piece of emojiPieces"
+        class="emoji"
+        [style.--x]="piece.x + 'px'"
+        [style.--y]="piece.y + 'px'"
+      >
         {{ piece.emoji }}
       </span>
-      }
     </div>
   </div>
-  }
 </div>
